@@ -4,19 +4,17 @@ import 'package:flutter_pk/util.dart';
 
 class ScheduleApi {
   Future<List<Session>> getSessionList() async {
-    var date = await Firestore.instance
+    var date = await FirebaseFirestore.instance
         .collection(FireStoreKeys.dateCollection)
         .snapshots()
         .first;
 
-    var sessionCollection = date.documents.first.reference
-        .collection(FireStoreKeys.sessionCollection);
+    var sessionCollection =
+        date.docs.first.reference.collection(FireStoreKeys.sessionCollection);
 
-    var sessionList = await sessionCollection.getDocuments();
+    var sessionList = await sessionCollection.get();
 
-    return sessionList.documents
-        .map((item) => Session.fromSnapshot(item))
-        .toList();
+    return sessionList.docs.map((item) => Session.fromSnapshot(item)).toList();
   }
 }
 
@@ -49,7 +47,7 @@ class Speaker {
       };
 
   Speaker.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
+      : this.fromMap(snapshot.data(), reference: snapshot.reference);
 }
 
 class Session {
@@ -88,5 +86,5 @@ class Session {
         description = map['description'];
 
   Session.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
+      : this.fromMap(snapshot.data(), reference: snapshot.reference);
 }

@@ -52,7 +52,7 @@ class SessionDetailPage extends StatelessWidget {
             buttons: [
               DialogButton(
                 child: Text("Cool!",
-                    style: Theme.of(context).textTheme.title.copyWith(
+                    style: Theme.of(context).textTheme.caption.copyWith(
                           color: Colors.white,
                         )),
                 color: Colors.green,
@@ -183,7 +183,7 @@ class SessionDetailPage extends StatelessWidget {
                 'Fetching speaker details',
                 style: Theme.of(context)
                     .textTheme
-                    .title
+                    .caption
                     .copyWith(color: Colors.grey),
               ),
             );
@@ -203,7 +203,7 @@ class SessionDetailPage extends StatelessWidget {
                 'Fetching speaker details',
                 style: Theme.of(context)
                     .textTheme
-                    .title
+                    .caption
                     .copyWith(color: Colors.grey),
               ),
             );
@@ -274,19 +274,19 @@ class SessionDetailPage extends StatelessWidget {
 
   Future<Speaker> _getData() async {
     CollectionReference reference =
-        await Firestore.instance.collection(FireStoreKeys.speakerCollection);
+        FirebaseFirestore.instance.collection(FireStoreKeys.speakerCollection);
     var speaker =
-        Speaker.fromSnapshot(await reference.document(session.speakerId).get());
+        Speaker.fromSnapshot(await reference.doc(session.speakerId).get());
     return speaker;
   }
 
   Future<List<Speaker>> _getMultiSpeakerData() async {
     CollectionReference reference =
-        await Firestore.instance.collection(FireStoreKeys.speakerCollection);
+        FirebaseFirestore.instance.collection(FireStoreKeys.speakerCollection);
     var speakerOne = Speaker.fromSnapshot(
-        await reference.document(session.speakers[0]).get());
+        await reference.doc(session.speakers[0]).get());
     var speakerTwo = Speaker.fromSnapshot(
-        await reference.document(session.speakers[1]).get());
+        await reference.doc(session.speakers[1]).get());
     List<Speaker> list = List<Speaker>();
     list.addAll(<Speaker>[
       speakerOne,

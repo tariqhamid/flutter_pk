@@ -19,7 +19,6 @@ class SchedulePageState extends State<SchedulePage>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _fetchSessions();
   }
@@ -78,7 +77,7 @@ class SchedulePageState extends State<SchedulePage>
       return Center(
         child: Text(
           'Nothing found!',
-          style: Theme.of(context).textTheme.title.copyWith(
+          style: Theme.of(context).textTheme.caption.copyWith(
                 color: Colors.black26,
                 fontWeight: FontWeight.bold,
               ),
@@ -159,8 +158,8 @@ class SchedulePageState extends State<SchedulePage>
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => SessionDetailPage(
-                session: session,
-              ),
+            session: session,
+          ),
         ),
       );
   }

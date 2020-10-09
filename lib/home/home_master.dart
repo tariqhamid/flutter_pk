@@ -37,14 +37,12 @@ class HomePageMasterState extends State<HomePageMaster> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _setUser(true);
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       sized: false,
@@ -84,15 +82,15 @@ class HomePageMasterState extends State<HomePageMaster> {
                 currentIndex: _selectedIndex,
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.date_range), title: Text('Schedule')),
+                      icon: Icon(Icons.date_range), label: 'Schedule'),
                   BottomNavigationBarItem(
                       icon: Icon(
                         Icons.date_range,
                         color: Colors.transparent,
                       ),
-                      title: Text(' ')),
+                      label: ' '),
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.location_on), title: Text('Venue')),
+                      icon: Icon(Icons.location_on), label: 'Venue'),
                 ],
               ),
       ),
@@ -113,7 +111,7 @@ class HomePageMasterState extends State<HomePageMaster> {
             buttons: [
               DialogButton(
                 child: Text("Cool!",
-                    style: Theme.of(context).textTheme.title.copyWith(
+                    style: Theme.of(context).textTheme.caption.copyWith(
                           color: Colors.white,
                         )),
                 color: Colors.green,
@@ -135,7 +133,7 @@ class HomePageMasterState extends State<HomePageMaster> {
           buttons: [
             DialogButton(
               child: Text("Cool!",
-                  style: Theme.of(context).textTheme.title.copyWith(
+                  style: Theme.of(context).textTheme.caption.copyWith(
                         color: Colors.white,
                       )),
               color: Colors.green,
@@ -181,43 +179,45 @@ class HomePageMasterState extends State<HomePageMaster> {
     }
   }
 
-  Future<String> _scanQr() async {
+  Future<void> _scanQr() async {
     try {
-      String qrDataString = await BarcodeScanner.scan();
+      var result = await BarcodeScanner.scan();
+      String qrDataString = result.rawContent;
+
       print(qrDataString);
       if (qrDataString == GlobalConstants.qrKey) {
         setState(() {
           _isLoading = true;
         });
-        DocumentReference attendanceReference = Firestore.instance
+        DocumentReference attendanceReference = FirebaseFirestore.instance
             .collection(FireStoreKeys.attendanceCollection)
-            .document(FireStoreKeys.dateReferenceString);
+            .doc(FireStoreKeys.dateReferenceString);
 
         CollectionReference attendeeCollectionReference =
             attendanceReference.collection(FireStoreKeys.attendeesCollection);
 
         int attendanceCount;
-        await Firestore.instance
+        await FirebaseFirestore.instance
             .collection(FireStoreKeys.attendanceCollection)
-            .document(FireStoreKeys.dateReferenceString)
+            .doc(FireStoreKeys.dateReferenceString)
             .get()
             .then((onValue) {
           attendanceCount = onValue['attendanceCount'];
         });
 
-        await attendanceReference
-            .setData({'attendanceCount': attendanceCount + 1}, merge: true);
+        await attendanceReference.set(
+            {'attendanceCount': attendanceCount + 1}, SetOptions(merge: true));
 
-        await attendeeCollectionReference.document(userCache.user.id).setData(
+        await attendeeCollectionReference.doc(userCache.user.id).set(
           {'userName': userCache.user.name},
-          merge: true,
+          SetOptions(merge: true),
         );
         CollectionReference reference =
-            Firestore.instance.collection(FireStoreKeys.userCollection);
+            FirebaseFirestore.instance.collection(FireStoreKeys.userCollection);
 
         await reference
-            .document(userCache.user.id)
-            .setData({"isPresent": true}, merge: true);
+            .doc(userCache.user.id)
+            .set({"isPresent": true}, SetOptions(merge: true));
         _setUser(true);
         Alert(
           context: context,
@@ -227,7 +227,7 @@ class HomePageMasterState extends State<HomePageMaster> {
           buttons: [
             DialogButton(
               child: Text("Cool!",
-                  style: Theme.of(context).textTheme.title.copyWith(
+                  style: Theme.of(context).textTheme.caption.copyWith(
                         color: Colors.white,
                       )),
               color: Colors.green,
@@ -249,7 +249,7 @@ class HomePageMasterState extends State<HomePageMaster> {
           buttons: [
             DialogButton(
               child: Text("Dismiss",
-                  style: Theme.of(context).textTheme.title.copyWith(
+                  style: Theme.of(context).textTheme.caption.copyWith(
                         color: Colors.white,
                       )),
               color: Colors.blueGrey,
@@ -270,7 +270,7 @@ class HomePageMasterState extends State<HomePageMaster> {
         buttons: [
           DialogButton(
             child: Text("Dismiss",
-                style: Theme.of(context).textTheme.title.copyWith(
+                style: Theme.of(context).textTheme.caption.copyWith(
                       color: Colors.white,
                     )),
             color: Colors.red,
@@ -294,8 +294,7 @@ class HomePageMasterState extends State<HomePageMaster> {
         fullscreenDialog: true,
       ),
     );
-    var user =
-        await userCache.getUser(userCache.user.id, useCached: false);
+    var user = await userCache.getUser(userCache.user.id, useCached: false);
     setState(() {
       _user = user;
     });

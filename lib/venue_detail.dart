@@ -25,14 +25,12 @@ class VenueDetailPageState extends State<VenueDetailPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getData();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       body: Column(
         children: <Widget>[_buildBody()],
@@ -117,27 +115,25 @@ class VenueDetailPageState extends State<VenueDetailPage> {
       _isLoading = true;
     });
     EventDetails _eventDetails = new EventDetails();
-    var eventDetails = Firestore.instance
+    var eventDetails = FirebaseFirestore.instance
         .collection(FireStoreKeys.dateCollection)
         .snapshots()
         .first;
     eventDetails.then((onValue) {
       locationCache.setLocation(
-        onValue.documents.first['venue']['location']['longitude'].toString(),
-        onValue.documents.first['venue']['location']['latitude'].toString(),
+        onValue.docs.first['venue']['location']['longitude'].toString(),
+        onValue.docs.first['venue']['location']['latitude'].toString(),
       );
       _eventDetails = EventDetails(
-          reference: onValue.documents.first.reference,
+          reference: onValue.docs.first.reference,
           venue: Venue(
-              address: onValue.documents.first['venue']['address'],
-              title: onValue.documents.first['venue']['title'],
-              city: onValue.documents.first['venue']['city'],
-              imageUrl: onValue.documents.first['venue']['imageUrl'],
+              address: onValue.docs.first['venue']['address'],
+              title: onValue.docs.first['venue']['title'],
+              city: onValue.docs.first['venue']['city'],
+              imageUrl: onValue.docs.first['venue']['imageUrl'],
               location: Location(
-                latitude: onValue.documents.first['venue']['location']
-                    ['latitude'],
-                longitude: onValue.documents.first['venue']['location']
-                    ['longitude'],
+                latitude: onValue.docs.first['venue']['location']['latitude'],
+                longitude: onValue.docs.first['venue']['location']['longitude'],
               )));
       setState(() {
         _venue = _eventDetails.venue;

@@ -21,7 +21,6 @@ class FullScreenFeedbackDialogState extends State<FullScreenFeedbackDialog> {
   bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       backgroundColor: ColorDictionary.stringToColor[widget.session.color],
       body: Stack(
@@ -99,7 +98,7 @@ class FullScreenFeedbackDialogState extends State<FullScreenFeedbackDialog> {
                       ),
                       SmoothStarRating(
                         allowHalfRating: true,
-                        onRatingChanged: (value) {
+                        onRated: (value) {
                           setState(() {
                             rating = value;
                           });
@@ -156,12 +155,12 @@ class FullScreenFeedbackDialogState extends State<FullScreenFeedbackDialog> {
     setState(() => _isLoading = true);
     try {
       CollectionReference reference =
-          Firestore.instance.collection(FireStoreKeys.userCollection);
-      await reference.document(userCache.user.id).setData(
+          FirebaseFirestore.instance.collection(FireStoreKeys.userCollection);
+      await reference.doc(userCache.user.id).set(
         {
           'feedback': {widget.session.id: rating}
         },
-        merge: true,
+        SetOptions(merge: true),
       );
       Alert(
         context: context,
@@ -171,7 +170,7 @@ class FullScreenFeedbackDialogState extends State<FullScreenFeedbackDialog> {
         buttons: [
           DialogButton(
             child: Text("Cool!",
-                style: Theme.of(context).textTheme.title.copyWith(
+                style: Theme.of(context).textTheme.caption.copyWith(
                       color: Colors.white,
                     )),
             color: ColorDictionary.stringToColor[widget.session.color],
@@ -194,7 +193,7 @@ class FullScreenFeedbackDialogState extends State<FullScreenFeedbackDialog> {
         buttons: [
           DialogButton(
             child: Text("Dismiss",
-                style: Theme.of(context).textTheme.title.copyWith(
+                style: Theme.of(context).textTheme.caption.copyWith(
                       color: Colors.white,
                     )),
             color: Colors.red,

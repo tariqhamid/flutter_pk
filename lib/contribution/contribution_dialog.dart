@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pk/caches/user.dart';
-import 'package:flutter_pk/dialogs/custom_error_dialog.dart';
 import 'package:flutter_pk/global.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -22,7 +20,6 @@ class FullScreenContributionDialogState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -62,7 +59,7 @@ class FullScreenContributionDialogState
               child: FlatButton(
                 child: Text(
                   'SKIP',
-                  style: Theme.of(context).textTheme.subhead.copyWith(
+                  style: Theme.of(context).textTheme.subtitle1.copyWith(
                         color: Colors.grey,
                       ),
                 ),
@@ -94,7 +91,7 @@ class FullScreenContributionDialogState
       padding: const EdgeInsets.all(8.0),
       child: Text(
         'In what capacity do you want to contribute to the Flutter community?',
-        style: Theme.of(context).textTheme.title,
+        style: Theme.of(context).textTheme.caption,
         textAlign: TextAlign.center,
       ),
     );
@@ -174,8 +171,8 @@ class FullScreenContributionDialogState
   void _submitDetails() async {
     if (!_validate()) return;
     try {
-      Firestore.instance.runTransaction((transaction) async {
-        await transaction.update(userCache.user.reference, {
+      FirebaseFirestore.instance.runTransaction((transaction) async {
+        transaction.update(userCache.user.reference, {
           'isContributor': true,
           'contribution': {
             'volunteer': _isVolunteer,
@@ -197,7 +194,7 @@ class FullScreenContributionDialogState
         buttons: [
           DialogButton(
             child: Text("Dismiss",
-                style: Theme.of(context).textTheme.title.copyWith(
+                style: Theme.of(context).textTheme.caption.copyWith(
                       color: Colors.white,
                     )),
             color: Colors.red,

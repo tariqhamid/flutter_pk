@@ -10,7 +10,7 @@ class UserCache {
       return _user;
     }
     _user = User.fromSnapshot(
-        await Firestore.instance.collection('users').document(id).get());
+        await FirebaseFirestore.instance.collection('users').doc(id).get());
     return _user;
   }
 
@@ -66,7 +66,7 @@ class User {
       };
 
   User.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
+      : this.fromMap(snapshot.data(), reference: snapshot.reference);
 }
 
 class Contribution {

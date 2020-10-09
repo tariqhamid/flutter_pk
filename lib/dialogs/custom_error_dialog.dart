@@ -33,7 +33,7 @@ void showErrorDialog(String title, String message, BuildContext context) async {
                           children: <Widget>[
                             Text(
                               title,
-                              style: Theme.of(context).textTheme.title,
+                              style: Theme.of(context).textTheme.caption,
                             ),
                             Padding(
                               padding: const EdgeInsets.only(
@@ -44,7 +44,7 @@ void showErrorDialog(String title, String message, BuildContext context) async {
                               child: Center(
                                 child: Text(
                                   message,
-                                  style: Theme.of(context).textTheme.subhead,
+                                  style: Theme.of(context).textTheme.subtitle1,
                                   textAlign: TextAlign.center,
                                 ),
                               ),

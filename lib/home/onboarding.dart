@@ -28,7 +28,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     api.initialize();
@@ -93,7 +92,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             children: <Widget>[
               Text(
                 'Register | Attend | Build',
-                style: Theme.of(context).textTheme.title,
+                style: Theme.of(context).textTheme.caption,
               ),
               Padding(
                 padding:
@@ -125,14 +124,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           SprungBox(
-            damped: Damped.critically,
+            damped: Damped.over,
             callback: (bool value) {},
           ),
           Column(
             children: <Widget>[
               Text(
                 'Welcome to Flutter Pakistan',
-                style: Theme.of(context).textTheme.title,
+                style: Theme.of(context).textTheme.caption,
               ),
               AnimatedCrossFade(
                 crossFadeState: _showSwipeText
@@ -192,7 +191,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         buttons: [
           DialogButton(
             child: Text("Dismiss",
-                style: Theme.of(context).textTheme.title.copyWith(
+                style: Theme.of(context).textTheme.caption.copyWith(
                       color: Colors.white,
                     )),
             color: Colors.red,
@@ -210,8 +209,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
   void _getSharedPreferences() async {
     setState(() => _isFetchingSharedPreferences = true);
     try {
-      var userId = await preferences.getValue(
-          SharedPreferencesKeys.firebaseUserId);
+      var userId =
+          await preferences.getValue(SharedPreferencesKeys.firebaseUserId);
       if (userId != null) {
         await userCache.getUser(userId);
         await Navigator.of(context).pushNamedAndRemoveUntil(
@@ -229,7 +228,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         buttons: [
           DialogButton(
             child: Text("Dismiss",
-                style: Theme.of(context).textTheme.title.copyWith(
+                style: Theme.of(context).textTheme.caption.copyWith(
                       color: Colors.white,
                     )),
             color: Colors.red,

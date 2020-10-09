@@ -20,7 +20,6 @@ class FullScreenProfileDialogState extends State<FullScreenProfileDialog> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     preferences = SharedPreferencesHandler();
     _setUser();
@@ -56,7 +55,7 @@ class FullScreenProfileDialogState extends State<FullScreenProfileDialog> {
             GestureDetector(
               child: Text(
                 'SIGN OUT',
-                style: Theme.of(context).textTheme.subhead.copyWith(
+                style: Theme.of(context).textTheme.subtitle1.copyWith(
                       color: Theme.of(context).accentColor,
                     ),
               ),
@@ -80,7 +79,7 @@ class FullScreenProfileDialogState extends State<FullScreenProfileDialog> {
                     buttons: [
                       DialogButton(
                         child: Text("Dismiss",
-                            style: Theme.of(context).textTheme.title.copyWith(
+                            style: Theme.of(context).textTheme.caption.copyWith(
                                   color: Colors.white,
                                 )),
                         color: Colors.red,
@@ -125,7 +124,7 @@ class FullScreenProfileDialogState extends State<FullScreenProfileDialog> {
                   _user.name,
                   style: Theme.of(context)
                       .textTheme
-                      .title
+                      .caption
                       .copyWith(color: Colors.grey),
                 ),
               ),
@@ -133,7 +132,7 @@ class FullScreenProfileDialogState extends State<FullScreenProfileDialog> {
                 _user.email,
                 style: Theme.of(context)
                     .textTheme
-                    .subhead
+                    .subtitle1
                     .copyWith(color: Colors.black38),
               ),
             ],

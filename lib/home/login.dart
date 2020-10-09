@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter_pk/caches/user.dart';
 import 'package:flutter_pk/global.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -8,13 +8,14 @@ class LoginApi {
   Future<String> initiateLogin() async {
     GoogleSignInAuthentication googleAuth = await _handleGoogleSignIn();
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
+    final fb_auth.AuthCredential credential =
+        fb_auth.GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
 
-    final AuthResult authResult = await auth.signInWithCredential(credential);
-    final FirebaseUser user = authResult.user;
+    final authResult = await auth.signInWithCredential(credential);
+    final fb_auth.User user = authResult.user;
 
 //    FirebaseUser user = await auth.signInWithGoogle(
 //      accessToken: googleAuth.accessToken,
@@ -26,20 +27,22 @@ class LoginApi {
     return user.uid;
   }
 
-  Future _setUserToFireStore(FirebaseUser user) async {
+  Future _setUserToFireStore(fb_auth.User user) async {
     CollectionReference reference =
-        Firestore.instance.collection(FireStoreKeys.userCollection);
+        FirebaseFirestore.instance.collection(FireStoreKeys.userCollection);
 
-    await reference.document(user.uid).get().then((snap) async {
+    await reference.doc(user.uid).get().then((snap) async {
       if (!snap.exists) {
         User _user = User(
             name: user.displayName,
             mobileNumber: user.phoneNumber,
             id: user.uid,
-            photoUrl: user.photoUrl,
+            photoUrl: user.photoURL,
             email: user.email);
 
-        await reference.document(user.uid).setData(_user.toJson(), merge: true);
+        await reference
+            .doc(user.uid)
+            .set(_user.toJson(), SetOptions(merge: true));
       }
     });
   }
@@ -51,9 +54,12 @@ class LoginApi {
   }
 
   initialize() {
-    Firestore.instance.settings(
-      // TODO: Update this according to the new implementation
-//      timestampsInSnapshotsEnabled: true,
+    /*
+    FirebaseFirestore.instance.settings = Settings(
+      timestampsInSnapshotsEnabled: true,
     );
+    */
+
+    // FirebaseFirestore.instance.settings = FirebaseFirestoreSettings();
   }
 }

@@ -20,19 +20,19 @@ class CustomAppBarState extends State<CustomAppBar> {
   @override
   void initState() {
     super.initState();
-    var eventDetails = Firestore.instance
+    var eventDetails = FirebaseFirestore.instance
         .collection(FireStoreKeys.dateCollection)
         .snapshots()
         .first;
     eventDetails.then((onValue) {
       setState(() {
         eventDate = formatDate(
-          toDateTime(onValue.documents.first['date']),
+          toDateTime(onValue.docs.first['date']),
           DateFormats.shortUiDateFormat,
         );
         eventDateTimeCache
-            .setDateTime(toDateTime(onValue.documents.first['date']));
-        eventTitle = onValue.documents.first['eventTitle'];
+            .setDateTime(toDateTime(onValue.docs.first['date']));
+        eventTitle = onValue.docs.first['eventTitle'];
       });
     });
   }
@@ -66,7 +66,7 @@ class CustomAppBarState extends State<CustomAppBar> {
               children: <Widget>[
                 Text(
                   eventTitle,
-                  style: Theme.of(context).textTheme.title,
+                  style: Theme.of(context).textTheme.caption,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.clip,
                 ),

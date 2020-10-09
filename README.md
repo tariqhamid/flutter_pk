@@ -73,3 +73,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+---
+##### firestore-import -a  ~/unicompute/firebase/flutter-pk-firebase-adminsdk-ll1ch-0c27636866.json -b firebase-export.json
+
+pod cache clean —all
+flutter clean
+flutter pub get
+pod install
